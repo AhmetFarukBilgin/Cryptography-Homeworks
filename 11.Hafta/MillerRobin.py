@@ -38,3 +38,12 @@ def miller_rabin(n, k=10):
             return False  # kesin bileşik
 
     return True  # büyük ihtimalle asal
+# Örnek kullanım:
+n = 104729  # 10000. asal sayı
+print(miller_rabin(n, k=10))
+n = 104728  # Bileşik sayı
+print(miller_rabin(n, k=10))
+n = 561  # Carmichael sayısı (bileşik ama Miller-Rabin ile test edilebilir)
+print(miller_rabin(n, k=10))
+n = 1105  # Başka bir Carmichael sayısı
+print(miller_rabin(n, k=10))
