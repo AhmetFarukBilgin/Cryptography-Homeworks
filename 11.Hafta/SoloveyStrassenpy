@@ -1,0 +1,61 @@
+import random
+
+def jacobi_symbol(a, n):
+    """
+    Jacobi sembolü (a/n) hesaplama
+    n tek ve pozitif olmak zorundadır
+    """
+    if n <= 0 or n % 2 == 0:
+        raise ValueError("n tek ve pozitif olmalı")
+
+    a = a % n
+    result = 1
+
+    while a != 0:
+        # a çiftse
+        while a % 2 == 0:
+            a //= 2
+            if n % 8 in (3, 5):
+                result = -result
+
+        a, n = n, a  # quadratic reciprocity
+
+        if a % 4 == 3 and n % 4 == 3:
+            result = -result
+
+        a %= n
+
+    return result if n == 1 else 0
+
+
+def solovay_strassen(n, k=10):
+    """
+    Solovay–Strassen Primality Test
+    n : test edilecek sayı
+    k : iterasyon sayısı (güvenlik parametresi)
+    """
+
+    if n < 2:
+        return False
+    if n in (2, 3):
+        return True
+    if n % 2 == 0:
+        return False
+
+    for _ in range(k):
+        a = random.randrange(2, n - 1)
+
+        x = jacobi_symbol(a, n)
+        if x == 0:
+            return False
+
+        # Euler kriteri
+        mod_exp = pow(a, (n - 1) // 2, n)
+
+        if mod_exp != x % n:
+            return False
+
+    return True
+# Örnek kullanım:
+n = 561  # Carmichael sayısı
+print(solovay_strassen(n, k=10))
